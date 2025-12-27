@@ -1,6 +1,6 @@
 package gedeon.net.bank.service;
 
-import gedeon.net.bank.entite.TypeDeRole;
+import gedeon.net.bank.TypeDeRole;
 import gedeon.net.bank.entite.Role;
 import gedeon.net.bank.entite.Utilisateur;
 import gedeon.net.bank.entite.Validation;

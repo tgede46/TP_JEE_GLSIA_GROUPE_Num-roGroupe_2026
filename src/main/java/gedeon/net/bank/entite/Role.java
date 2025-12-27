@@ -1,5 +1,7 @@
 package gedeon.net.bank.entite;
 
+
+import gedeon.net.bank.TypeDeRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -7,7 +7,6 @@ import gedeon.net.bank.repository.JwtRepository;
 import gedeon.net.bank.service.UtilisateurService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
@@ -101,10 +100,10 @@ public class JwtService {
 
     private Claims getAllClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(this.getKey())
+                .verifyWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(ENCRIPTION_KEY)))
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     private Map<String, String> generateJwt(Utilisateur utilisateur) {
@@ -118,11 +117,11 @@ public class JwtService {
         );
 
         final String bearer = Jwts.builder()
-                .setIssuedAt(new Date(currentTime))
-                .setExpiration(new Date(expirationTime))
-                .setSubject(utilisateur.getEmail())
-                .setClaims(claims)
-                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .issuedAt(new Date(currentTime))
+                .expiration(new Date(expirationTime))
+                .subject(utilisateur.getEmail())
+                .claims(claims)
+                .signWith(getKey())
                 .compact();
         return Map.of(BEARER, bearer);
     }
